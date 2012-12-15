@@ -20,55 +20,69 @@ function init_bandit() {
         }
       },
       ready: function(stage) {
-        this.element = this.createElement(),
-                animation = canvas.Animation.new({
-                    images: "player",
-                    animations: {
-                        idle: {
-                            frames: [0, 3],
-                            size: {
-                                width: 64,
-                                height: 64
-                            },
-                            frequence: 5
-                        },
-                        kick: {
-                            frames: [5*16, 5*16+6],
-                            size: {
-                                width: 64,
-                                height: 64
-                            },
-                            frequence: 3
-                        },
-                        walk: {
-                            frames: [16, 16+5],
-                            size: {
-                                width: 64,
-                                height: 64
-                            },
-                            frequence: 5
-                        },
-                        die: {
-                            frames: [4*16, 4*16+6],
-                            size: {
-                                width: 64,
-                                height: 64
-                            },
-                            frequence: 15
-                        }
-                    }
-                });
+          this.players = [];
 
-        register_keys();
+          var that = this;
+          function addPlayer(index) {
+              var player = that.createElement();
+              player.animation = canvas.Animation.new({
+                  images: "player",
+                  animations: {
+                      idle: {
+                          frames: [0, 3],
+                  size: {
+                      width: 64,
+                  height: 64
+                  },
+                  frequence: 5
+                      },
+                  kick: {
+                      frames: [5*16, 5*16+6],
+                  size: {
+                      width: 64,
+                  height: 64
+                  },
+                  frequence: 3
+                  },
+                  walk: {
+                      frames: [16, 16+5],
+                      size: {
+                          width: 64,
+                          height: 64
+                      },
+                      frequence: 5
+                  },
+                  die: {
+                      frames: [4*16, 4*16+6],
+                      size: {
+                          width: 64,
+                          height: 64
+                      },
+                      frequence: 15
+                  }
+                  }
+              });
 
-        animation.add(this.element);
-        animation.play("idle", "loop");
-        
-        this.element.xspeed = 0;
-        this.element.yspeed = 0;
-        this.element.defaultspeed = 2;
-        this.element.scaleX = 2;
-        this.element.scaleY = 2;
+              if (index === 0) {
+                  register_keys(player);
+              }
+
+              player.animation.add(player);
+              player.animation.play("idle", "loop");
+              player.xspeed = 0;
+              player.yspeed = 0;
+              player.defaultspeed = 2;
+              player.scaleX = 2;
+              player.scaleY = 2;
+              stage.append(player);
+
+              return player;
+          }
+
+          this.players.push(addPlayer(0));
+
+          // would add remote players like this:
+          this.players.push(addPlayer(1));
 
         var el = this.createElement();
         el.fillStyle = "black";
@@ -90,15 +104,18 @@ function init_bandit() {
         this.health = health;
         set_health(100);
 
-        stage.append(this.element);
         stage.append(h);
         stage.append(this.health);
         stage.append(el);
       },
       render: function(stage) {
-        this.element.defaultspeed = 2;
-        this.element.x += this.element.xspeed;
-        this.element.y += this.element.yspeed;
+        var i;
+        for (i=0; i<this.players.length; i++) {
+            var player = this.players[i];
+            player.defaultspeed = 2;
+            player.x += player.xspeed;
+            player.y += player.yspeed;
+        }
         reduce_health(0.5);
         stage.refresh();
       }
@@ -107,8 +124,8 @@ function init_bandit() {
     function set_health(percent) {
       mainScene.health.scaleX=percent;
       if (percent==0) {
-        animation.stop();
-        animation.play('die', 10);
+        mainScene.players[0].animation.stop();
+        mainScene.players[0].animation.play('die', 10);
       }
     }
 
@@ -121,55 +138,55 @@ function init_bandit() {
       }
     }
 
-    function register_keys() {
+    function register_keys(player) {
       function anim_idle() {
-        animation.stop();
-        animation.play("idle", "loop");
+        player.animation.stop();
+        player.animation.play("idle", "loop");
       }
       function anim_walk() {
-        animation.stop();
-        animation.play("walk");
+        player.animation.stop();
+        player.animation.play("walk");
       }
-      
+
       canvas.Input.keyDown(Input.Up, function() {
-          mainScene.element.yspeed = -mainScene.element.defaultspeed;
+          player.yspeed = -player.defaultspeed;
           anim_walk();
         });
         canvas.Input.keyUp(Input.Up, function() {
-          mainScene.element.yspeed = 0;
+          player.yspeed = 0;
           anim_idle();
         });
 
         canvas.Input.keyDown(Input.Bottom, function() {
-          mainScene.element.yspeed = mainScene.element.defaultspeed;
+          player.yspeed = player.defaultspeed;
           anim_walk();
         });
         canvas.Input.keyUp(Input.Bottom, function() {
-          mainScene.element.yspeed = 0;
+          player.yspeed = 0;
           anim_idle();
         });
 
         canvas.Input.keyDown(Input.Left, function() {
-          mainScene.element.xspeed = -mainScene.element.defaultspeed;
+          player.xspeed = -player.defaultspeed;
           anim_walk();
         });
         canvas.Input.keyUp(Input.Left, function() {
-          mainScene.element.xspeed = 0;
+          player.xspeed = 0;
           anim_idle();
         });
 
         canvas.Input.keyDown(Input.Right, function() {
-          mainScene.element.xspeed = mainScene.element.defaultspeed;
+          player.xspeed = player.defaultspeed;
           anim_walk();
         });
         canvas.Input.keyUp(Input.Right, function() {
-          mainScene.element.xspeed = 0;
+          player.xspeed = 0;
           anim_idle();
         });
 
         canvas.Input.keyDown(Input.Space, function() {
-          animation.stop();
-          animation.play("kick");
+          player.animation.stop();
+          player.animation.play("kick");
           set_health(100);
         });
         canvas.Input.keyUp(Input.Space, function() {
