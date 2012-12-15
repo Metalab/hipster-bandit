@@ -59,6 +59,8 @@ function init_bandit() {
         this.element.xspeed = 0;
         this.element.yspeed = 0;
         this.element.defaultspeed = 2;
+        this.element.scaleX = 2;
+        this.element.scaleY = 2;
 
         var el = this.createElement();
         el.fillStyle = "black";
