@@ -39,7 +39,7 @@ canvas.Scene.new({
                             width: 64,
                             height: 64
                         },
-                        frequence: 5
+                        frequence: 3
                     },
                     walk: {
                         frames: [16, 16+5],
@@ -52,58 +52,7 @@ canvas.Scene.new({
                 }
             });
 
-    canvas.Input.keyDown(Input.Up, function() {
-      mainScene.element.yspeed = -mainScene.element.defaultspeed;
-      animation.stop();
-      animation.play("walk");
-    });
-    canvas.Input.keyUp(Input.Up, function() {
-      mainScene.element.yspeed = 0;
-      animation.stop();
-      animation.play("idle", "loop");
-    });
-
-    canvas.Input.keyDown(Input.Bottom, function() {
-      mainScene.element.yspeed = mainScene.element.defaultspeed;
-      animation.stop();
-      animation.play("walk");
-    });
-    canvas.Input.keyUp(Input.Bottom, function() {
-      mainScene.element.yspeed = 0;
-      animation.stop();
-      animation.play("idle", "loop");
-    });
-
-    canvas.Input.keyDown(Input.Left, function() {
-      mainScene.element.xspeed = -mainScene.element.defaultspeed;
-      animation.stop();
-      animation.play("walk");
-    });
-    canvas.Input.keyUp(Input.Left, function() {
-      mainScene.element.xspeed = 0;
-      animation.stop();
-      animation.play("idle", "loop");
-    });
-
-    canvas.Input.keyDown(Input.Right, function() {
-      mainScene.element.xspeed = mainScene.element.defaultspeed;
-      animation.stop();
-      animation.play("walk");
-    });
-    canvas.Input.keyUp(Input.Right, function() {
-      mainScene.element.xspeed = 0;
-      animation.stop();
-      animation.play("idle", "loop");
-    });
-
-    canvas.Input.keyDown(Input.Space, function() {
-      animation.stop();
-      animation.play("kick");
-    });
-    canvas.Input.keyUp(Input.Space, function() {
-      animation.stop();
-      animation.play("idle", "loop");
-    });
+    register_keys();
 
     animation.add(this.element);
     animation.play("idle", "loop");
@@ -124,5 +73,60 @@ canvas.Scene.new({
     stage.refresh();
   }
 });
+
+function register_keys() {
+  function anim_idle() {
+    animation.stop();
+    animation.play("idle", "loop");
+  }
+  function anim_walk() {
+    animation.stop();
+    animation.play("walk");
+  }
+  
+  canvas.Input.keyDown(Input.Up, function() {
+      mainScene.element.yspeed = -mainScene.element.defaultspeed;
+      anim_walk();
+    });
+    canvas.Input.keyUp(Input.Up, function() {
+      mainScene.element.yspeed = 0;
+      anim_idle();
+    });
+
+    canvas.Input.keyDown(Input.Bottom, function() {
+      mainScene.element.yspeed = mainScene.element.defaultspeed;
+      anim_walk();
+    });
+    canvas.Input.keyUp(Input.Bottom, function() {
+      mainScene.element.yspeed = 0;
+      anim_idle();
+    });
+
+    canvas.Input.keyDown(Input.Left, function() {
+      mainScene.element.xspeed = -mainScene.element.defaultspeed;
+      anim_walk();
+    });
+    canvas.Input.keyUp(Input.Left, function() {
+      mainScene.element.xspeed = 0;
+      anim_idle();
+    });
+
+    canvas.Input.keyDown(Input.Right, function() {
+      mainScene.element.xspeed = mainScene.element.defaultspeed;
+      anim_walk();
+    });
+    canvas.Input.keyUp(Input.Right, function() {
+      mainScene.element.xspeed = 0;
+      anim_idle();
+    });
+
+    canvas.Input.keyDown(Input.Space, function() {
+      animation.stop();
+      animation.play("kick");
+    });
+    canvas.Input.keyUp(Input.Space, function() {
+      anim_idle();
+    });
+}
 
 </script>
