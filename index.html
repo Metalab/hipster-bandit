@@ -84,7 +84,7 @@ canvas.Scene.new({
     this.health = health;
     set_health(100);
 
-    playSound('music/fight.mp3');
+    playBackgroundMusic('music/fight.mp3');
 
     stage.append(this.element);
     stage.append(h);
@@ -157,9 +157,9 @@ function register_keys() {
     });
 }
 
-function playSound(soundfile) {
+function playBackgroundMusic(soundfile) {
  document.getElementById("dummy").innerHTML=
- "<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"false\" />";
+ "<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"true\" />";
  }
 
 </script>
