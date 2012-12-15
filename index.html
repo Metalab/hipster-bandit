@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <script src="CanvasEngine/canvasengine-1.0.7.all.min.js"></script>
 <canvas id="canvas_id" width="800" height="600"></canvas>
+<div id="dummy"></div>
 
 <script>
 
@@ -24,35 +25,35 @@ canvas.Scene.new({
   },
   ready: function(stage) {
     this.element = this.createElement(),
-            animation = canvas.Animation.new({
-                images: "player",
-                animations: {
-                    idle: {
-                        frames: [0, 3],
-                        size: {
-                            width: 64,
-                            height: 64
-                        },
-                        frequence: 5
+        animation = canvas.Animation.new({
+            images: "player",
+            animations: {
+                idle: {
+                    frames: [0, 3],
+                    size: {
+                        width: 64,
+                        height: 64
                     },
-                    kick: {
-                        frames: [5*16, 5*16+6],
-                        size: {
-                            width: 64,
-                            height: 64
-                        },
-                        frequence: 3
+                    frequence: 5
+                },
+                kick: {
+                    frames: [5*16, 5*16+6],
+                    size: {
+                        width: 64,
+                        height: 64
                     },
-                    walk: {
-                        frames: [16, 16+5],
-                        size: {
-                            width: 64,
-                            height: 64
-                        },
-                        frequence: 5
-                    }
+                    frequence: 3
+                },
+                walk: {
+                    frames: [16, 16+5],
+                    size: {
+                        width: 64,
+                        height: 64
+                    },
+                    frequence: 5
                 }
-            });
+            }
+        });
 
     register_keys();
 
@@ -83,13 +84,14 @@ canvas.Scene.new({
     this.health = health;
     set_health(100);
 
+    playSound('music/fight.mp3');
+
     stage.append(this.element);
     stage.append(h);
     stage.append(this.health);
     stage.append(el);
   },
   render: function(stage) {
-    this.element.defaultspeed = 2;
     this.element.x += this.element.xspeed;
     this.element.y += this.element.yspeed;
     stage.refresh();
@@ -154,5 +156,10 @@ function register_keys() {
       anim_idle();
     });
 }
+
+function playSound(soundfile) {
+ document.getElementById("dummy").innerHTML=
+ "<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"false\" />";
+ }
 
 </script>
