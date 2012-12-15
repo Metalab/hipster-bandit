@@ -47,6 +47,14 @@ function init_bandit() {
                                 height: 64
                             },
                             frequence: 5
+                        },
+                        die: {
+                            frames: [4*16, 4*16+6],
+                            size: {
+                                width: 64,
+                                height: 64
+                            },
+                            frequence: 5
                         }
                     }
                 });
@@ -91,12 +99,26 @@ function init_bandit() {
         this.element.defaultspeed = 2;
         this.element.x += this.element.xspeed;
         this.element.y += this.element.yspeed;
+        reduce_health(0.5);
         stage.refresh();
       }
     });
 
     function set_health(percent) {
       mainScene.health.scaleX=percent;
+      if (percent==0) {
+        animation.stop();
+        animation.play('die');
+      }
+    }
+
+    function reduce_health(percent) {
+      if (mainScene.health.scaleX <= percent) {
+        set_health(0);
+      }
+      else {
+        mainScene.health.scaleX -= percent;
+      }
     }
 
     function register_keys() {
