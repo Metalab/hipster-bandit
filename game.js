@@ -153,9 +153,11 @@ function init_bandit() {
     }
 
     function playBackgroundMusic(soundfile) {
-       document.getElementById("dummy").innerHTML=
-     "<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"true\" />";
+        var audio = document.createElement('audio');
+        audio.setAttribute('controls', 'controls');
+        audio.src = soundfile;
+        audio.play();
     }
-    playBackgroundMusic('music/fight.mp3');
+    playBackgroundMusic('music/fight.ogg');
 }
 
