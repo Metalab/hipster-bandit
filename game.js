@@ -170,6 +170,7 @@ function init_bandit() {
         canvas.Input.keyDown(Input.Space, function() {
           animation.stop();
           animation.play("kick");
+          set_health(100);
         });
         canvas.Input.keyUp(Input.Space, function() {
           anim_idle();
