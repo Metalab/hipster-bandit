@@ -17,7 +17,9 @@ canvas.Scene.new({
   name: "MainScene",
   materials: {
     images: {
-      player: "sprites/cat_sprite.png"
+      player: "sprites/cat_sprite.png",
+      progress_filled: "textures/progressbar_filled.png",
+      progress_empty: "textures/progressbar_empty.png"
     }
   },
   ready: function(stage) {
@@ -60,19 +62,43 @@ canvas.Scene.new({
     this.element.xspeed = 0;
     this.element.yspeed = 0;
     this.element.defaultspeed = 2;
-    
+
+    var el = this.createElement();
+    el.fillStyle = "black";
+    el.font = "20px Arial";
+    el.textBaseline = "top";
+    el.fillText("Health:", 0, 0);
+
+    var h = this.createElement();
+    h.drawImage('progress_empty');
+    h.scaleX=100;
+    h.scaleY=0.5;
+    h.x = 80;
+
+    var health = this.createElement();
+    health.drawImage('progress_filled');
+    health.x = 80;
+    health.scaleY=0.5;
+
+    this.health = health;
+    set_health(100);
+
     stage.append(this.element);
+    stage.append(h);
+    stage.append(this.health);
+    stage.append(el);
   },
   render: function(stage) {
-    //if (this.element.x >= 500 || this.element.x < 0) {
-      //this.element.speed *= -1;
-    //}
     this.element.defaultspeed = 2;
     this.element.x += this.element.xspeed;
     this.element.y += this.element.yspeed;
     stage.refresh();
   }
 });
+
+function set_health(percent) {
+  mainScene.health.scaleX=percent;
+}
 
 function register_keys() {
   function anim_idle() {
