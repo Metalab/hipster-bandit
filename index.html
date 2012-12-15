@@ -1,32 +1,126 @@
 <!DOCTYPE html>
 <script src="CanvasEngine/canvasengine-1.0.7.all.min.js"></script>
-<canvas id="canvas_id" width="640" height="480"></canvas>
+<canvas id="canvas_id" width="800" height="600"></canvas>
 
 <script>
 
+var mainScene;
 var canvas = CE.defines("canvas_id").
-ready(function() {
-    canvas.Scene.call("MyScene");
+  extend(Animation).
+  extend(Input).
+  ready(function() {
+    canvas.Scene.call("MainScene");
+    mainScene = canvas.Scene.get('MainScene');
 });
 
 canvas.Scene.new({
-  name: "MyScene", // Obligatory
+  name: "MainScene",
   materials: {
     images: {
-      img_id: "http://th09.deviantart.net/fs70/150/i/2011/352/b/f/lentes_hipster_png_c__by_lookatmenowcami-d4jdt20.png"
+      player: "sprites/cat_sprite.png"
     }
   },
   ready: function(stage) {
-    this.element = this.createElement();
-    this.element.speed = 10;
-    this.element.drawImage("img_id");
+    this.element = this.createElement(),
+            animation = canvas.Animation.new({
+                images: "player",
+                animations: {
+                    idle: {
+                        frames: [0, 3],
+                        size: {
+                            width: 64,
+                            height: 64
+                        },
+                        frequence: 5
+                    },
+                    kick: {
+                        frames: [5*16, 5*16+6],
+                        size: {
+                            width: 64,
+                            height: 64
+                        },
+                        frequence: 5
+                    },
+                    walk: {
+                        frames: [16, 16+5],
+                        size: {
+                            width: 64,
+                            height: 64
+                        },
+                        frequence: 5
+                    }
+                }
+            });
+
+    canvas.Input.keyDown(Input.Up, function() {
+      mainScene.element.yspeed = -mainScene.element.defaultspeed;
+      animation.stop();
+      animation.play("walk");
+    });
+    canvas.Input.keyUp(Input.Up, function() {
+      mainScene.element.yspeed = 0;
+      animation.stop();
+      animation.play("idle", "loop");
+    });
+
+    canvas.Input.keyDown(Input.Bottom, function() {
+      mainScene.element.yspeed = mainScene.element.defaultspeed;
+      animation.stop();
+      animation.play("walk");
+    });
+    canvas.Input.keyUp(Input.Bottom, function() {
+      mainScene.element.yspeed = 0;
+      animation.stop();
+      animation.play("idle", "loop");
+    });
+
+    canvas.Input.keyDown(Input.Left, function() {
+      mainScene.element.xspeed = -mainScene.element.defaultspeed;
+      animation.stop();
+      animation.play("walk");
+    });
+    canvas.Input.keyUp(Input.Left, function() {
+      mainScene.element.xspeed = 0;
+      animation.stop();
+      animation.play("idle", "loop");
+    });
+
+    canvas.Input.keyDown(Input.Right, function() {
+      mainScene.element.xspeed = mainScene.element.defaultspeed;
+      animation.stop();
+      animation.play("walk");
+    });
+    canvas.Input.keyUp(Input.Right, function() {
+      mainScene.element.xspeed = 0;
+      animation.stop();
+      animation.play("idle", "loop");
+    });
+
+    canvas.Input.keyDown(Input.Space, function() {
+      animation.stop();
+      animation.play("kick");
+    });
+    canvas.Input.keyUp(Input.Space, function() {
+      animation.stop();
+      animation.play("idle", "loop");
+    });
+
+    animation.add(this.element);
+    animation.play("idle", "loop");
+    
+    this.element.xspeed = 0;
+    this.element.yspeed = 0;
+    this.element.defaultspeed = 2;
+    
     stage.append(this.element);
   },
   render: function(stage) {
-    if (this.element.x >= 500 || this.element.x < 0) {
-      this.element.speed *= -1;
-    }
-    this.element.x += this.element.speed;
+    //if (this.element.x >= 500 || this.element.x < 0) {
+      //this.element.speed *= -1;
+    //}
+    this.element.defaultspeed = 2;
+    this.element.x += this.element.xspeed;
+    this.element.y += this.element.yspeed;
     stage.refresh();
   }
 });
