@@ -54,7 +54,7 @@ function init_bandit() {
                                 width: 64,
                                 height: 64
                             },
-                            frequence: 5
+                            frequence: 15
                         }
                     }
                 });
@@ -108,7 +108,7 @@ function init_bandit() {
       mainScene.health.scaleX=percent;
       if (percent==0) {
         animation.stop();
-        animation.play('die');
+        animation.play('die', 10);
       }
     }
 
