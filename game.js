@@ -57,6 +57,14 @@ function init_bandit() {
                           height: 64
                       },
                       frequence: 15
+                  },
+                  dead: {
+                      frames: [4*16+6, 4*16+6],
+                      size: {
+                          width: 64,
+                          height: 64
+                      },
+                      frequence: 1
                   }
                   }
               });
@@ -125,7 +133,9 @@ function init_bandit() {
       mainScene.health.scaleX=percent;
       if (percent==0) {
         mainScene.players[0].animation.stop();
-        mainScene.players[0].animation.play('die', 10);
+        mainScene.players[0].animation.play('die');
+        setTimeout(20);
+        mainScene.players[0].animation.play('dead');
       }
     }
 
@@ -198,6 +208,7 @@ function init_bandit() {
     function playBackgroundMusic(soundfile) {
         var audio = document.createElement('audio');
         audio.setAttribute('controls', 'controls');
+        audio.setAttribute('loop', 'true');
         audio.src = soundfile;
         audio.play();
     }
