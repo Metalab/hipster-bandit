@@ -1,6 +1,4 @@
-
 function init_bandit() {
-    var mainScene;
 
     var canvas = CE.defines("game").
       extend(Animation).
@@ -28,15 +26,15 @@ function init_bandit() {
               player.animation = canvas.Animation.new({
                   images: "player",
                   animations: {
-                      idle: {
-                          frames: [0, 3],
-                  size: {
-                      width: 64,
-                  height: 64
-                  },
-                  frequence: 5
+                    idle: {
+                      frames: [0, 3],
+                      size: {
+                        width: 64,
+                        height: 64
                       },
-                  kick: {
+                      frequence: 5
+                    },
+                  punch: {
                       frames: [5*16, 5*16+6],
                   size: {
                       width: 64,
@@ -74,6 +72,8 @@ function init_bandit() {
               player.defaultspeed = 2;
               player.scaleX = 2;
               player.scaleY = 2;
+              console.log(player);
+              player.scale(-3,-3);
               stage.append(player);
 
               return player;
@@ -186,7 +186,8 @@ function init_bandit() {
 
         canvas.Input.keyDown(Input.Space, function() {
           player.animation.stop();
-          player.animation.play("kick");
+          player.animation.play("punch");
+          playSound("sounds/punch.ogg");
           set_health(100);
         });
         canvas.Input.keyUp(Input.Space, function() {
@@ -200,6 +201,14 @@ function init_bandit() {
         audio.src = soundfile;
         audio.play();
     }
+
+    function playSound(soundfile) {
+        var audio = document.createElement('audio');
+        audio.setAttribute('controls', 'controls');
+        audio.src = soundfile;
+        audio.play();
+    }
+    
     playBackgroundMusic('music/fight.ogg');
 }
 
